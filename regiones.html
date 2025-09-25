@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayNonPregnant - Análisis Regional del Perú</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #764ba2;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: #764ba2;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+        
+        .page-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .page-header p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        
+        .section-title {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: #764ba2;
+            text-align: center;
+        }
+        
+        .regions-overview {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .overview-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .overview-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fdcb6e;
+        }
+        
+        .regional-map {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .region-card {
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #ee5a24;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .region-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .region-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .region-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+        
+        .region-name {
+            font-weight: bold;
+            font-size: 1.4em;
+            color: #764ba2;
+        }
+        
+        .region-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #e17055;
+        }
+        
+        .stat-desc {
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .challenges-list {
+            margin-top: 15px;
+        }
+        
+        .challenge-item {
+            background: rgba(238, 90, 36, 0.1);
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 3px solid #ee5a24;
+            font-size: 0.95em;
+        }
+        
+        .loreto-spotlight {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .spotlight-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .spotlight-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .spotlight-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .pandemic-impact {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .pandemic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .pandemic-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .pandemic-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .chart-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .chart-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .chart-container h3 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+        
+        .solutions-region {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .solution-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .solution-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .regional-map {
+                grid-template-columns: 1fr;
+            }
+            
+            .page-header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo">🌸 StayNonPregnant</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estadisticas.html">Estadísticas</a></li>
+                <li><a href="impacto.html">Impacto</a></li>
+                <li><a href="regiones.html" class="active">Regiones</a></li>
+                <li><a href="barreras.html">Barreras</a></li>
+                <li><a href="calendario.html">Calendario</a></li>
+                <li><a href="recursos.html">Recursos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>🗺️ Análisis Regional del Perú</h1>
+            <p>Cada región del país enfrenta desafíos únicos en la prevención del embarazo adolescente</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="regions-overview">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">📍 Panorama Nacional</h2>
+                <div class="overview-stats">
+                    <div class="overview-card">
+                        <div class="overview-number">24</div>
+                        <p>Regiones analizadas</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">3</div>
+                        <p>Regiones naturales afectadas</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">65%</div>
+                        <p>Mayor incidencia en áreas rurales</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">2.3M</div>
+                        <p>Adolescentes en riesgo (10-19 años)</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🌍 Análisis por Regiones</h2>
+            <div class="regional-map">
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">🌿</div>
+                        <div class="region-name">Loreto - Amazonía</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">18.4%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">#1</div>
+                            <div class="stat-desc">Ranking nacional</div>
+                        </div>
+                    </div>
+                    <p><strong>Situación crítica:</strong> Mayor índice de embarazos adolescentes del país. Comunidades dispersas con acceso limitado a servicios de salud.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🏥 Falta de personal médico capacitado</div>
+                        <div class="challenge-item">🛶 Dificultad de acceso por vías fluviales</div>
+                        <div class="challenge-item">🗣️ Barreras lingüísticas en comunidades nativas</div>
+                        <div class="challenge-item">👨‍👩‍👧‍👦 Resistencia cultural a la educación sexual</div>
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">🏔️</div>
+                        <div class="region-name">Ayacucho - Sierra</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">15.2%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">+45%</div>
+                            <div class="stat-desc">Aumento en pandemia</div>
+                        </div>
+                    </div>
+                    <p><strong>Impacto COVID-19:</strong> Reducción drástica del acceso a servicios de salud sexual durante la emergencia sanitaria.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🦠 Cierre de centros de salud durante pandemia</div>
+                        <div class="challenge-item">💊 Falta de métodos anticonceptivos</div>
+                        <div class="challenge-item">🏠 Violencia doméstica incrementada</div>
+                        <div class="challenge-item">📱 Limitado acceso a internet para educación virtual</div>
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">🏙️</div>
+                        <div class="region-name">Lima - Costa</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">11.8%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">65%</div>
+                            <div class="stat-desc">Cobertura ESI irregular</div>
+                        </div>
+                    </div>
+                    <p><strong>Paradoja urbana:</strong> A pesar de tener más recursos, la ESI no se aplica de manera consistente en todas las instituciones.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🎓 Aplicación inconsistente de programas ESI</div>
+                        <div class="challenge-item">👨‍🏫 Docentes sin capacitación especializada</div>
+                        <div class="challenge-item">🏘️ Grandes diferencias entre distritos</div>
+                        <div class="challenge-item">📱 Desinformación en redes sociales</div>
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">🌳</div>
+                        <div class="region-name">Ucayali - Amazonía</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">16.7%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">75%</div>
+                            <div class="stat-desc">Sin acceso a información</div>
+                        </div>
+                    </div>
+                    <p><strong>Comunidades amazónicas:</strong> Barreras lingüísticas y culturales limitan el acceso a información confiable sobre sexualidad.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🗣️ Información no adaptada a lenguas originarias</div>
+                        <div class="challenge-item">🏫 Escuelas con recursos limitados</div>
+                        <div class="challenge-item">⚡ Falta de electricidad e internet</div>
+                        <div class="challenge-item">📊 Propagación de mitos peligrosos</div>
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">⛰️</div>
+                        <div class="region-name">Apurímac - Sierra</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">14.9%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">85%</div>
+                            <div class="stat-desc">Población rural</div>
+                        </div>
+                    </div>
+                    <p><strong>Ruralidad extrema:</strong> Comunidades andinas con tradiciones que dificultan la implementación de programas de educación sexual.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🏔️ Geografía montañosa dificulta acceso</div>
+                        <div class="challenge-item">👴 Autoridades tradicionales conservadoras</div>
+                        <div class="challenge-item">💰 Extrema pobreza rural</div>
+                        <div class="challenge-item">🎭 Roles de género muy marcados</div>
+                    </div>
+                </div>
+
+                <div class="region-card">
+                    <div class="region-header">
+                        <div class="region-icon">🏖️</div>
+                        <div class="region-name">Piura - Costa Norte</div>
+                    </div>
+                    <div class="region-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">13.5%</div>
+                            <div class="stat-desc">Tasa embarazo adolescente</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">40%</div>
+                            <div class="stat-desc">Programas exitosos</div>
+                        </div>
+                    </div>
+                    <p><strong>Experiencias mixtas:</strong> Algunos distritos han implementado programas exitosos mientras otros mantienen altas tasas de embarazo adolescente.</p>
+                    <div class="challenges-list">
+                        <div class="challenge-item">🌊 Variabilidad entre zonas costeras y rurales</div>
+                        <div class="challenge-item">🏗️ Migración por trabajo temporal</div>
+                        <div class="challenge-item">📚 Falta de continuidad en programas</div>
+                        <div class="challenge-item">💡 Necesidad de réplica de buenas prácticas</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="loreto-spotlight">
+            <div class="container">
+                <div class="spotlight-content">
+                    <h2 class="section-title" style="color: white;">🚨 Foco en Loreto: La Región Más Afectada</h2>
+                    <p style="text-align: center; font-size: 1.2em; opacity: 0.9; margin-bottom: 30px;">
+                        Según la Defensoría del Pueblo y el UNFPA (2023), Loreto presenta la cifra más alta de embarazos en niñas y adolescentes de todo el país.
+                    </p>
+                    <div class="spotlight-stats">
+                        <div class="spotlight-card">
+                            <h4>Tasa de Embarazo</h4>
+                            <div style="font-size: 2.2em; font-weight: bold; color: #fdcb6e;">18.4%</div>
+                            <p>La más alta del país</p>
+                        </div>
+                        <div class="spotlight-card">
+                            <h4>Población Adolescente</h4>
+                            <div style="font-size: 2.2em; font-weight: bold; color: #fdcb6e;">120K</div>
+                            <p>Entre 10-19 años</p>
+                        </div>
+                        <div class="spotlight-card">
+                            <h4>Cobertura de Salud</h4>
+                            <div style="font-size: 2.2em; font-weight: bold; color: #fdcb6e;">35%</div>
+                            <p>Acceso a servicios ESR</p>
+                        </div>
+                        <div class="spotlight-card">
+                            <h4>Comunidades Nativas</h4>
+                            <div style="font-size: 2.2em; font-weight: bold; color: #fdcb6e;">45+</div>
+                            <p>Pueblos indígenas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="pandemic-impact">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">🦠 Impacto de la Pandemia por Regiones</h2>
+                <p style="text-align: center; font-size: 1.2em; opacity: 0.9;">Durante la COVID-19, el problema se agravó en todas las regiones, pero con diferentes intensidades</p>
+                <div class="pandemic-grid">
+                    <div class="pandemic-card">
+                        <div class="pandemic-icon">📈</div>
+                        <h4>Sierra Rural</h4>
+                        <p><strong>+45% embarazos adolescentes</strong></p>
+                        <p>Ayacucho, Apurímac y Huancavelica fueron las más afectadas por el cierre de servicios de salud.</p>
+                    </div>
+                    <div class="pandemic-card">
+                        <div class="pandemic-icon">🏥</div>
+                        <h4>Amazonía</h4>
+                        <p><strong>-60% acceso a servicios</strong></p>
+                        <p>Loreto y Ucayali vieron reducidos drásticamente sus ya limitados servicios de salud sexual.</p>
+                    </div>
+                    <div class="pandemic-card">
+                        <div class="pandemic-icon">📱</div>
+                        <h4>Costa Urbana</h4>
+                        <p><strong>Adaptación digital irregular</strong></p>
+                        <p>Lima y ciudades principales implementaron servicios virtuales con resultados mixtos.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">📊 Comparativa Regional</h2>
+            <div class="chart-section">
+                <div class="chart-container">
+                    <h3>Tasas de Embarazo Adolescente por Región</h3>
+                    <canvas id="regionalRatesChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Acceso a Servicios de Salud Sexual</h3>
+                    <canvas id="healthAccessChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Factores de Riesgo Predominantes</h3>
+                    <canvas id="riskFactorsChart"></canvas>
+                </div>
+                
+                <div class="chart-container">
+                    <h3>Cobertura de Educación Sexual Integral</h3>
+                    <canvas id="esiCoverageChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="solutions-region">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">✨ Soluciones Adaptadas por Región</h2>
+                <div class="solutions-grid">
+                    <div class="solution-card">
+                        <div class="solution-icon">🏔️</div>
+                        <h4>Para la Sierra</h4>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Trabajo con autoridades tradicionales</li>
+                            <li>Programas en quechua y aymara</li>
+                            <li>Centros de salud móviles</li>
+                            <li>Capacitación a parteras tradicionales</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-icon">🏙️</div>
+                        <h4>Para áreas Urbanas</h4>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Plataformas digitales interactivas</li>
+                            <li>Centros juveniles especializados</li>
+                            <li>Programas escolares sistematizados</li>
+                            <li>Campañas en redes sociales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 StayNonPregnant - Datos regionales basados en ENDES, UNFPA y Defensoría del Pueblo</p>
+            <p>🌸 Soluciones locales para desafíos nacionales</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gráfico de Tasas de Embarazo por Región
+        const regionalRatesCtx = document.getElementById('regionalRatesChart').getContext('2d');
+        new Chart(regionalRatesCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Loreto (18.4%)', 'Ucayali (16.7%)', 'Ayacucho (15.2%)', 'Apurímac (14.9%)', 'Piura (13.5%)', 'Lima (11.8%)', 'Otras Regiones'],
+                datasets: [{
+                    data: [18.4, 16.7, 15.2, 14.9, 13.5, 11.8, 9.5],
+                    backgroundColor: [
+                        '#d63031',
+                        '#e17055', 
+                        '#fdcb6e',
+                        '#f39c12',
+                        '#74b9ff',
+                        '#00b894',
+                        '#a29bfe'
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Acceso a Servicios de Salud
+        const healthAccessCtx = document.getElementById('healthAccessChart').getContext('2d');
+        new Chart(healthAccessCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Sin Acceso', 'Acceso Limitado', 'Acceso Parcial', 'Acceso Completo'],
+                datasets: [{
+                    data: [35, 40, 20, 5],
+                    backgroundColor: ['#d63031', '#e17055', '#fdcb6e', '#00b894'],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Factores de Riesgo Predominantes
+        const riskFactorsCtx = document.getElementById('riskFactorsChart').getContext('2d');
+        new Chart(riskFactorsCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Falta de Servicios de Salud', 'Barreras Culturales', 'Pobreza Extrema', 'Violencia Sexual', 'Falta de Educación', 'Otros'],
+                datasets: [{
+                    data: [30, 25, 20, 15, 8, 2],
+                    backgroundColor: [
+                        '#e17055',
+                        '#fdcb6e',
+                        '#74b9ff',
+                        '#d63031',
+                        '#a29bfe',
+                        '#00b894'
+                    ],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Cobertura ESI
+        const esiCoverageCtx = document.getElementById('esiCoverageChart').getContext('2d');
+        new Chart(esiCoverageCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Sin Cobertura ESI', 'Cobertura Mínima', 'Cobertura Parcial', 'Cobertura Completa'],
+                datasets: [{
+                    data: [45, 30, 20, 5],
+                    backgroundColor: ['#d63031', '#e17055', '#fdcb6e', '#00b894'],
+                    borderWidth: 3,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>icon">🌿</div>
+                        <h4>Para la Amazonía</h4>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Promotores de salud comunitarios</li>
+                            <li>Materiales en lenguas nativas</li>
+                            <li>Uso de radios comunitarias</li>
+                            <li>Telemedicina por satélite</li>
+                        </ul>
+                    </div>
+                    <div class="solution-card">
+                        <div class="solution-

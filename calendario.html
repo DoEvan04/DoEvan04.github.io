@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayNonPregnant - Calendario Menstrual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #764ba2;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: #764ba2;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 60px 0;
+            color: #2d3436;
+        }
+        
+        .page-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+        }
+        
+        .page-header p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.8;
+        }
+        
+        .calendar-main {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 40px;
+            margin: 40px 0;
+        }
+        
+        .calendar-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-form {
+            margin-bottom: 30px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #764ba2;
+            font-size: 1.1em;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #764ba2;
+            outline: none;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(118, 75, 162, 0.3);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        
+        .calendar-nav {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .calendar-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-day {
+            background: white;
+            padding: 15px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .calendar-day:hover {
+            background: #f8f9fa;
+            transform: scale(1.05);
+        }
+        
+        .calendar-day.header {
+            background: #764ba2;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: default;
+        }
+        
+        .calendar-day.header:hover {
+            transform: none;
+        }
+        
+        .calendar-day.period {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.period::after {
+            content: "🔴";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8em;
+        }
+        
+        .calendar-day.fertile {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.fertile::after {
+            content: "🌱";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8em;
+        }
+        
+        /* Ventana Fértil: Verde (alta probabilidad de embarazo) */
+        
+        .calendar-day.ovulation {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.follicular {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.follicular::after {
+            content: "🌸";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8em;
+        }
+        
+        .calendar-day.luteal {
+            background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .calendar-day.luteal::after {
+            content: "🌙";
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8em;
+        }
+        
+        .calendar-day.other-month {
+            color: #ccc;
+            background: #f8f9fa;
+        }
+        
+        .calendar-day.today {
+            border: 3px solid #764ba2;
+            font-weight: bold;
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .sidebar h3 {
+            color: #764ba2;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+        
+        .cycle-info {
+            margin-bottom: 30px;
+        }
+        
+        .cycle-phase {
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .cycle-phase:hover {
+            transform: translateY(-3px);
+        }
+        
+        .phase-menstrual {
+            background: linear-gradient(135deg, #ffe0e0 0%, #ffb3b3 100%);
+            border: 2px solid #ff6b6b;
+        }
+        
+        .phase-follicular {
+            background: linear-gradient(135deg, #e0f3ff 0%, #b3d9ff 100%);
+            border: 2px solid #74b9ff;
+        }
+        
+        .phase-ovulation {
+            background: linear-gradient(135deg, #fff8e0 0%, #ffe0b3 100%);
+            border: 2px solid #fdcb6e;
+        }
+        
+        .phase-fertile {
+            background: linear-gradient(135deg, #e0f8f0 0%, #b3f0d9 100%);
+            border: 2px solid #00b894;
+        }
+        
+        /* Ventana Fértil: Verde (alta probabilidad de embarazo) */
+        
+        .phase-luteal {
+            background: linear-gradient(135deg, #f0e6ff 0%, #d9b3ff 100%);
+            border: 2px solid #764ba2;
+        }
+        
+        .phase-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+        
+        .phase-days {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        
+        .phase-desc {
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+        
+        .tips-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tips-title {
+            color: #764ba2;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        
+        .tip-item {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.9em;
+            border-left: 3px solid #764ba2;
+        }
+        
+        .stats-section {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #fdcb6e;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .education-section {
+            background: white;
+            margin: 40px 0;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: #764ba2;
+            text-align: center;
+        }
+        
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .education-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .education-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 968px) {
+            .calendar-main {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-grid {
+                font-size: 0.9em;
+            }
+            
+            .calendar-day {
+                min-height: 50px;
+                padding: 10px 5px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2em;
+            }
+            
+            .calendar-container, .sidebar {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo">🌸 StayNonPregnant</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estadisticas.html">Estadísticas</a></li>
+                <li><a href="impacto.html">Impacto</a></li>
+                <li><a href="regiones.html">Regiones</a></li>
+                <li><a href="barreras.html">Barreras</a></li>
+                <li><a href="calendario.html" class="active">Calendario</a></li>
+                <li><a href="recursos.html">Recursos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>📅 Calendario Menstrual Inteligente</h1>
+            <p>Conoce tu ciclo, toma decisiones informadas y cuida tu salud reproductiva</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="calendar-main">
+            <div class="calendar-container">
+                <div class="calendar-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="lastPeriod">📅 Fecha de tu última menstruación:</label>
+                            <input type="date" id="lastPeriod" />
+                        </div>
+                        <div class="form-group">
+                            <label for="cycleLength">⏱️ Duración de tu ciclo (días):</label>
+                            <input type="number" id="cycleLength" value="28" min="21" max="35" />
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="periodLength">🩸 Duración de tu menstruación (días):</label>
+                            <input type="number" id="periodLength" value="5" min="3" max="8" />
+                        </div>
+                        <div class="form-group">
+                            <label for="symptoms">🤒 Síntomas a recordar:</label>
+                            <input type="text" id="symptoms" placeholder="Ej: dolor de cabeza, cólicos..." />
+                        </div>
+                    </div>
+                    <button class="btn" onclick="calculateCycle()">🔄 Calcular mi ciclo</button>
+                </div>
+                
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="previousMonth()">‹</button>
+                    <h3 id="currentMonth"></h3>
+                    <button class="calendar-nav" onclick="nextMonth()">›</button>
+                </div>
+                
+                <div class="calendar-grid" id="calendar"></div>
+            </div>
+            
+            <div class="sidebar">
+                <h3>🌸 Tu Guía del Ciclo</h3>
+                
+                <div class="cycle-info">
+                    <div class="cycle-phase phase-menstrual">
+                        <div class="phase-title">🔴 Menstruación</div>
+                        <div class="phase-days">Días 1-5 del ciclo</div>
+                        <div class="phase-desc">Período menstrual. Fertilidad muy baja. Es normal sentir cólicos y fatiga. Mantente hidratada y descansa.</div>
+                    </div>
+                    <div class="cycle-phase phase-follicular">
+                        <div class="phase-title">🌸 Fase Folicular</div>
+                        <div class="phase-days">Días 6-12 del ciclo (aprox.)</div>
+                        <div class="phase-desc">Tu cuerpo se prepara para la ovulación. Fertilidad baja a moderada. Buenos niveles de energía y estado de ánimo.</div>
+                    </div>
+                    <div class="cycle-phase phase-ovulation">
+                        <div class="phase-title">🥚 OVULACIÓN</div>
+                        <div class="phase-days">Día 14 (aprox.) ± 2 días</div>
+                        <div class="phase-desc"><strong>¡MÁXIMA FERTILIDAD!</strong> Días más fértiles del ciclo. Si no planeas embarazo, es CRUCIAL usar métodos anticonceptivos.</div>
+                    </div>
+                    <div class="cycle-phase phase-fertile">
+                        <div class="phase-title">🌱 VENTANA FÉRTIL</div>
+                        <div class="phase-days">2 días antes y después de ovulación</div>
+                        <div class="phase-desc"><strong>ALTA PROBABILIDAD DE EMBARAZO</strong> - Verde en el calendario. Período de máximo riesgo reproductivo. Uso de anticonceptivos es fundamental.</div>
+                    </div>
+                    <div class="cycle-phase phase-luteal">
+                        <div class="phase-title">🌙 Fase Lútea</div>
+                        <div class="phase-days">Días 15-28 del ciclo</div>
+                        <div class="phase-desc">Después de ovulación. Fertilidad decreciente. Posible síndrome premenstrual. Cuida tu alimentación y haz ejercicio suave.</div>
+                    </div>
+                </div>
+                
+                <div class="tips-section">
+                    <div class="tips-title">💡 Consejos Importantes</div>
+                    <div class="tip-item">🥚 <strong>Ovulación:</strong> Máxima fertilidad - protégete siempre</div>
+                    <div class="tip-item">📱 Registra síntomas diariamente</div>
+                    <div class="tip-item">🥤 Mantente bien hidratada</div>
+                    <div class="tip-item">🏃‍♀️ Ejercicio regular ayuda con cólicos</div>
+                    <div class="tip-item">😌 Maneja el estrés para ciclos regulares</div>
+                    <div class="tip-item">🩺 Consulta médica si hay irregularidades</div>
+                </div>
+                
+                <div class="stats-section" id="cycleStats">
+                    <h4>📊 Tu Ciclo Actual</h4>
+                    <div class="stat-item">
+                        <div class="stat-number" id="nextPeriod">--</div>
+                        <div class="stat-label">Días para próxima menstruación</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="fertileWindow">--</div>
+                        <div class="stat-label">Estado de fertilidad actual</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <section class="education-section">
+            <h2 class="section-title">📚 Educación sobre el Ciclo Menstrual</h2>
+            <div class="education-grid">
+                <div class="education-card">
+                    <div class="education-icon">🧠</div>
+                    <h3>¿Qué es Normal?</h3>
+                    <p>Un ciclo normal dura entre 21-35 días. La menstruación puede durar 3-7 días. Es normal tener pequeñas variaciones mes a mes.</p>
+                </div>
+                <div class="education-card">
+                    <div class="education-icon">⚠️</div>
+                    <h3>Cuándo Consultar</h3>
+                    <p>Si tu período es muy irregular, muy doloroso, dura más de 7 días, o si no llega por más de 3 meses sin estar embarazada.</p>
+                </div>
+                <div class="education-card">
+                    <div class="education-icon">🛡️</div>
+                    <h3>Prevención de Embarazo</h3>
+                    <p><strong>IMPORTANTE:</strong> Conocer tu ciclo te ayuda a identificar días fértiles, pero NO es un método anticonceptivo confiable por sí solo. ¡Siempre usa protección!</p>
+                </div>
+                <div class="education-card">
+                    <div class="education-icon">🌟</div>
+                    <h3>Mitos vs Realidad</h3>
+                    <p><strong>MITO:</strong> "No puedes quedar embarazada durante tu período". <strong>REALIDAD:</strong> Siempre existe riesgo, especialmente con ciclos cortos o irregulares.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 StayNonPregnant - Tu calendario menstrual educativo</p>
+            <p>🌸 Información no reemplaza consulta médica profesional</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentDate = new Date();
+        let lastPeriodDate = null;
+        let cycleLength = 28;
+        let periodLength = 5;
+
+        function initCalendar() {
+            updateCalendar();
+        }
+
+        function updateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            document.getElementById('currentMonth').textContent = 
+                new Date(year, month).toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+            
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            const calendarGrid = document.getElementById('calendar');
+            calendarGrid.innerHTML = '';
+            
+            // Headers
+            const headers = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            headers.forEach(header => {
+                const headerElement = document.createElement('div');
+                headerElement.className = 'calendar-day header';
+                headerElement.textContent = header;
+                calendarGrid.appendChild(headerElement);
+            });
+            
+            // Days
+            const currentCalendarDate = new Date(startDate);
+            const today = new Date();
+            
+            for (let i = 0; i < 42; i++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = currentCalendarDate.getDate();
+                
+                if (currentCalendarDate.getMonth() !== month) {
+                    dayElement.classList.add('other-month');
+                }
+                
+                // Highlight today
+                if (currentCalendarDate.toDateString() === today.toDateString()) {
+                    dayElement.classList.add('today');
+                }
+                
+                if (lastPeriodDate) {
+                    const daysDiff = Math.floor((currentCalendarDate - lastPeriodDate) / (1000 * 60 * 60 * 24));
+                    const cycleDay = ((daysDiff % cycleLength) + cycleLength) % cycleLength + 1;
+                    
+                    // Calcular día de ovulación basado en la duración del ciclo
+                    const ovulationDay = cycleLength - 14; // La ovulación ocurre 14 días antes del próximo período
+                    
+                    if (cycleDay <= periodLength) {
+                        dayElement.classList.add('period');
+                        dayElement.title = `Día ${cycleDay} de menstruación - Fertilidad muy baja`;
+                    } else if (cycleDay === ovulationDay) {
+                        dayElement.classList.add('ovulation');
+                        dayElement.title = `Día ${cycleDay}: OVULACIÓN - Máxima fertilidad. ¡Usa protección!`;
+                    } else if (cycleDay >= ovulationDay - 2 && cycleDay <= ovulationDay + 2) {
+                        // Ventana Fértil: Verde (alta probabilidad de embarazo)
+                        dayElement.classList.add('fertile');
+                        dayElement.title = `Día ${cycleDay}: Ventana fértil - Alta probabilidad de embarazo`;
+                    } else if (cycleDay >= periodLength + 1 && cycleDay <= ovulationDay - 3) {
+                        // Fase folicular (después de menstruación, antes de ventana fértil)
+                        dayElement.classList.add('follicular');
+                        dayElement.title = `Día ${cycleDay}: Fase folicular - Fertilidad baja a moderada`;
+                    } else if (cycleDay > ovulationDay + 2) {
+                        // Fase lútea (después de ovulación)
+                        dayElement.classList.add('luteal');
+                        dayElement.title = `Día ${cycleDay}: Fase lútea - Fertilidad decreciente`;
+                    }
+                }
+                
+                calendarGrid.appendChild(dayElement);
+                currentCalendarDate.setDate(currentCalendarDate.getDate() + 1);
+            }
+            
+            updateStats();
+        }
+
+        function calculateCycle() {
+            const lastPeriodInput = document.getElementById('lastPeriod').value;
+            const cycleLengthInput = document.getElementById('cycleLength').value;
+            const periodLengthInput = document.getElementById('periodLength').value;
+            
+            if (!lastPeriodInput) {
+                alert('Por favor, ingresa la fecha de tu última menstruación');
+                return;
+            }
+            
+            lastPeriodDate = new Date(lastPeriodInput);
+            cycleLength = parseInt(cycleLengthInput);
+            periodLength = parseInt(periodLengthInput);
+            
+            updateCalendar();
+        }
+
+        function updateStats() {
+            if (!lastPeriodDate) {
+                document.getElementById('nextPeriod').textContent = '--';
+                document.getElementById('fertileWindow').textContent = '--';
+                return;
+            }
+            
+            const today = new Date();
+            const daysSinceLastPeriod = Math.floor((today - lastPeriodDate) / (1000 * 60 * 60 * 24));
+            const cycleDay = (daysSinceLastPeriod % cycleLength) + 1;
+            const ovulationDay = cycleLength - 14; // Ovulación 14 días antes del próximo período
+            
+            // Days until next period
+            const daysUntilNextPeriod = cycleLength - cycleDay + 1;
+            document.getElementById('nextPeriod').textContent = daysUntilNextPeriod > 0 ? daysUntilNextPeriod : 'Hoy';
+            
+            // Days until fertile window/ovulation
+            let daysUntilFertile;
+            const fertileStart = ovulationDay - 2; // Ventana fértil comienza 2 días antes de ovulación
+            const fertileEnd = ovulationDay + 2; // Termina 2 días después
+            
+            if (cycleDay < fertileStart) {
+                daysUntilFertile = fertileStart - cycleDay;
+                document.getElementById('fertileWindow').textContent = daysUntilFertile;
+            } else if (cycleDay >= fertileStart && cycleDay <= fertileEnd) {
+                if (cycleDay === ovulationDay) {
+                    document.getElementById('fertileWindow').textContent = '¡HOY OVULAS!';
+                } else {
+                    document.getElementById('fertileWindow').textContent = 'EN VENTANA FÉRTIL';
+                }
+                return;
+            } else {
+                // Después de ventana fértil, calcular próxima
+                daysUntilFertile = (cycleLength - cycleDay) + fertileStart;
+                document.getElementById('fertileWindow').textContent = daysUntilFertile;
+            }
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            updateCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            updateCalendar();
+        }
+
+        // Initialize calendar on page load
+        window.addEventListener('load', initCalendar);
+        
+        // Set today's date as default
+        window.addEventListener('load', function() {
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            document.getElementById('lastPeriod').value = todayString;
+        });
+    </script>
+</body>
+</html>

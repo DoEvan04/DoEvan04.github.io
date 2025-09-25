@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayNonPregnant - Barreras y Obstáculos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #764ba2;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: white;
+            background: #764ba2;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+        
+        .page-header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .page-header p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background: white;
+            margin: 20px 0;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        
+        .section-title {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            color: #764ba2;
+            text-align: center;
+        }
+        
+        .barriers-overview {
+            background: linear-gradient(135deg, #d63031 0%, #e17055 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .overview-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .overview-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #fdcb6e;
+        }
+        
+        .barriers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .barrier-card {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border-left: 5px solid #ff6b6b;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .barrier-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .barrier-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .barrier-icon {
+            font-size: 2.5em;
+            margin-right: 15px;
+        }
+        
+        .barrier-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #764ba2;
+        }
+        
+        .barrier-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .barrier-examples {
+            background: rgba(255, 107, 107, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .barrier-examples h5 {
+            color: #e17055;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .example-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .example-list li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .example-list li::before {
+            content: "❌";
+            position: absolute;
+            left: 0;
+        }
+        
+        .solutions-preview {
+            background: rgba(118, 75, 162, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .solutions-preview h5 {
+            color: #764ba2;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .solution-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .solution-list li {
+            margin-bottom: 5px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .solution-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+        }
+        
+        .cultural-barriers {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .cultural-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .cultural-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .cultural-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .institutional-barriers {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .institutional-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .institutional-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .institutional-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+
+        
+        .overcoming-barriers {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            color: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+        
+        .overcoming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .overcoming-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .overcoming-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+        
+        .success-stories {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .story-card {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .story-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        .story-card h4 {
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .footer {
+            background: #2d3436;
+            color: white;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.2em;
+            }
+            
+            .barriers-grid {
+                grid-template-columns: 1fr;
+            }
+            
+
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a href="index.html" class="logo">🌸 StayNonPregnant</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="estadisticas.html">Estadísticas</a></li>
+                <li><a href="impacto.html">Impacto</a></li>
+                <li><a href="regiones.html">Regiones</a></li>
+                <li><a href="barreras.html" class="active">Barreras</a></li>
+                <li><a href="calendario.html">Calendario</a></li>
+                <li><a href="recursos.html">Recursos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <div class="container">
+            <h1>🚧 Barreras y Obstáculos</h1>
+            <p>Identificando y superando los obstáculos que impiden la educación sexual integral efectiva</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="barriers-overview">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">📊 Panorama de Barreras</h2>
+                <p style="text-align: center; font-size: 1.1em; opacity: 0.9; margin-bottom: 30px;">
+                    Las barreras para la educación sexual integral son múltiples y complejas en el contexto peruano
+                </p>
+                <div class="overview-stats">
+                    <div class="overview-card">
+                        <div class="overview-number">65%</div>
+                        <p>Padres oponen resistencia a ESI</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">70%</div>
+                        <p>Docentes sin capacitación adecuada</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">85%</div>
+                        <p>Comunidades rurales sin servicios</p>
+                    </div>
+                    <div class="overview-card">
+                        <div class="overview-number">60%</div>
+                        <p>Información incorrecta en redes</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">🚧 Principales Barreras Identificadas</h2>
+            <div class="barriers-grid">
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">👨‍👩‍👧‍👦</div>
+                        <div class="barrier-title">Resistencia Familiar</div>
+                    </div>
+                    <div class="barrier-description">
+                        Padres que creen que la ESI "malograría" a sus hijos, sin conocer la evidencia científica que demuestra lo contrario.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Manifestaciones Comunes:</h5>
+                        <ul class="example-list">
+                            <li>"La educación sexual corrompe a los niños"</li>
+                            <li>"Es muy temprano para hablar de eso"</li>
+                            <li>"Eso debe enseñarse solo en casa"</li>
+                            <li>"Los preservativos fomentan promiscuidad"</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Estrategias de Superación:</h5>
+                        <ul class="solution-list">
+                            <li>Talleres informativos para padres</li>
+                            <li>Evidencia científica sobre beneficios</li>
+                            <li>Testimonios de familias exitosas</li>
+                            <li>Diálogo respetuoso y gradual</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">👨‍🏫</div>
+                        <div class="barrier-title">Docentes No Preparados</div>
+                    </div>
+                    <div class="barrier-description">
+                        Profesores sin capacitación adecuada o que sienten temor a críticas de padres de familia, resultando en información incompleta o incorrecta.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Problemas Frecuentes:</h5>
+                        <ul class="example-list">
+                            <li>Falta de formación especializada en ESI</li>
+                            <li>Incomodidad personal con temas sexuales</li>
+                            <li>Temor a reacciones de padres conservadores</li>
+                            <li>Información desactualizada o incorrecta</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Soluciones Propuestas:</h5>
+                        <ul class="solution-list">
+                            <li>Programas de capacitación continua</li>
+                            <li>Materiales pedagógicos estandarizados</li>
+                            <li>Apoyo psicológico para docentes</li>
+                            <li>Respaldo institucional claro</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">🏥</div>
+                        <div class="barrier-title">Servicios de Salud Limitados</div>
+                    </div>
+                    <div class="barrier-description">
+                        Falta de acceso a servicios de salud sexual y reproductiva, especialmente en zonas rurales y amazónicas del país.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Deficiencias Principales:</h5>
+                        <ul class="example-list">
+                            <li>Centros de salud sin personal especializado</li>
+                            <li>Falta de métodos anticonceptivos</li>
+                            <li>Horarios inadecuados para adolescentes</li>
+                            <li>Atención sin confidencialidad</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Mejoras Necesarias:</h5>
+                        <ul class="solution-list">
+                            <li>Centros de salud amigables para jóvenes</li>
+                            <li>Telemedicina para zonas remotas</li>
+                            <li>Promotores de salud comunitarios</li>
+                            <li>Servicios móviles de salud</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">🌍</div>
+                        <div class="barrier-title">Factores Culturales</div>
+                    </div>
+                    <div class="barrier-description">
+                        Tradiciones y normas culturales que dificultan hablar abiertamente sobre sexualidad, especialmente en comunidades indígenas y rurales.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Manifestaciones Culturales:</h5>
+                        <ul class="example-list">
+                            <li>Tabúes sobre sexualidad femenina</li>
+                            <li>Roles de género muy rígidos</li>
+                            <li>Autoridades tradicionales conservadoras</li>
+                            <li>Barreras lingüísticas en comunidades nativas</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Enfoques Culturalmente Sensibles:</h5>
+                        <ul class="solution-list">
+                            <li>Trabajo con líderes comunitarios</li>
+                            <li>Materiales en lenguas originarias</li>
+                            <li>Respeto a cosmovisiones locales</li>
+                            <li>Adaptación cultural de mensajes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">📱</div>
+                        <div class="barrier-title">Desinformación Digital</div>
+                    </div>
+                    <div class="barrier-description">
+                        Jóvenes que buscan información en internet sin fuentes confiables, encontrando mitos peligrosos y desinformación generalizada.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Mitos Peligrosos Comunes:</h5>
+                        <ul class="example-list">
+                            <li>"La primera vez no hay riesgo de embarazo"</li>
+                            <li>"Los anticonceptivos son dañinos"</li>
+                            <li>"El coito interrumpido es efectivo"</li>
+                            <li>"Las apps del período previenen embarazos"</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Combatir la Desinformación:</h5>
+                        <ul class="solution-list">
+                            <li>Plataformas educativas oficiales</li>
+                            <li>Influencers con información científica</li>
+                            <li>Fact-checking de contenido viral</li>
+                            <li>Apps educativas certificadas</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="barrier-card">
+                    <div class="barrier-header">
+                        <div class="barrier-icon">💰</div>
+                        <div class="barrier-title">Factor Económico</div>
+                    </div>
+                    <div class="barrier-description">
+                        Pobreza que limita el acceso a métodos anticonceptivos, atención médica de calidad y educación completa.
+                    </div>
+                    <div class="barrier-examples">
+                        <h5>Impactos Económicos:</h5>
+                        <ul class="example-list">
+                            <li>Métodos anticonceptivos costosos</li>
+                            <li>Transporte a centros de salud</li>
+                            <li>Abandono escolar por trabajo</li>
+                            <li>Falta de acceso a internet/tecnología</li>
+                        </ul>
+                    </div>
+                    <div class="solutions-preview">
+                        <h5>Alternativas Económicas:</h5>
+                        <ul class="solution-list">
+                            <li>Programas gubernamentales gratuitos</li>
+                            <li>Subsidios para anticonceptivos</li>
+                            <li>Educación pública de calidad</li>
+                            <li>Becas para estudiantes vulnerables</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cultural-barriers">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">🎭 Barreras Culturales Específicas</h2>
+                <div class="cultural-grid">
+                    <div class="cultural-card">
+                        <div class="cultural-icon">🏔️</div>
+                        <h4>Comunidades Andinas</h4>
+                        <p>Roles de género tradicionales muy marcados. Las decisiones sobre sexualidad often dependen de autoridades masculinas mayores.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Matrimonios tempranos considerados normales</li>
+                            <li>Educación sexual vista como "occidentalización"</li>
+                            <li>Autoridades tradicionales pueden vetar programas</li>
+                        </ul>
+                    </div>
+                    <div class="cultural-card">
+                        <div class="cultural-icon">🌿</div>
+                        <h4>Pueblos Amazónicos</h4>
+                        <p>Barreras lingüísticas y conceptuales. Muchos conceptos de salud sexual no tienen traducción directa a lenguas nativas.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Más de 40 lenguas originarias diferentes</li>
+                            <li>Conceptos de cuerpo y sexualidad distintos</li>
+                            <li>Medicina tradicional vs. medicina occidental</li>
+                        </ul>
+                    </div>
+                    <div class="cultural-card">
+                        <div class="cultural-icon">⛪</div>
+                        <h4>Influencia Religiosa</h4>
+                        <p>Interpretaciones conservadoras de doctrinas religiosas que se oponen a métodos anticonceptivos y educación sexual.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Oposición a métodos anticonceptivos</li>
+                            <li>Énfasis en abstinencia únicamente</li>
+                            <li>Estigmatización de embarazos adolescentes</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="institutional-barriers">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">🏛️ Barreras Institucionales</h2>
+                <div class="institutional-grid">
+                    <div class="institutional-card">
+                        <div class="institutional-icon">🏫</div>
+                        <h4>Sistema Educativo</h4>
+                        <p>Currículas desactualizadas, falta de tiempo asignado a ESI, y resistencia de directivos escolares.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>ESI no prioritizada en horarios</li>
+                            <li>Falta de supervisión de calidad</li>
+                            <li>Directores conservadores bloquean programas</li>
+                        </ul>
+                    </div>
+                    <div class="institutional-card">
+                        <div class="institutional-icon">🏥</div>
+                        <h4>Sistema de Salud</h4>
+                        <p>Protocolos inadecuados para adolescentes, personal no capacitado en temas juveniles, y falta de confidencialidad.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Requisitos burocráticos complicados</li>
+                            <li>Personal que juzga a adolescentes</li>
+                            <li>Horarios incompatibles con estudio</li>
+                        </ul>
+                    </div>
+                    <div class="institutional-card">
+                        <div class="institutional-icon">⚖️</div>
+                        <h4>Marco Legal</h4>
+                        <p>Vacíos legales sobre derechos sexuales de adolescentes y falta de aplicación de normativas existentes.</p>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Edad de consentimiento confusa</li>
+                            <li>Derechos reproductivos limitados</li>
+                            <li>Falta de sanciones por incumplimiento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <section class="overcoming-barriers">
+            <div class="container">
+                <h2 class="section-title" style="color: white;">🌟 Superando las Barreras</h2>
+                <p style="text-align: center; font-size: 1.1em; opacity: 0.9; margin-bottom: 30px;">
+                    Estrategias comprobadas para derribar obstáculos y construir consensos
+                </p>
+                <div class="overcoming-grid">
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">🤝</div>
+                        <h4>Diálogo Intersectorial</h4>
+                        <p>Crear espacios de diálogo entre familias, educadores, líderes religiosos, autoridades locales y profesionales de salud.</p>
+                    </div>
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">📚</div>
+                        <h4>Educación Basada en Evidencia</h4>
+                        <p>Presentar datos científicos claros sobre los beneficios de la ESI y los riesgos de la falta de información.</p>
+                    </div>
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">🎓</div>
+                        <h4>Formación de Formadores</h4>
+                        <p>Capacitación intensiva y continua para docentes, personal de salud y líderes comunitarios.</p>
+                    </div>
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">📱</div>
+                        <h4>Tecnología Educativa</h4>
+                        <p>Plataformas digitales, apps y contenido multimedia que lleguen a jóvenes donde estén, con información confiable y atractiva.</p>
+                    </div>
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">🌍</div>
+                        <h4>Adaptación Cultural</h4>
+                        <p>Mensajes y enfoques adaptados a cada contexto cultural, respetando tradiciones mientras se promueve la salud.</p>
+                    </div>
+                    <div class="overcoming-card">
+                        <div class="overcoming-icon">💪</div>
+                        <h4>Empoderamiento Juvenil</h4>
+                        <p>Formar a jóvenes como líderes y multiplicadores de información correcta en sus comunidades.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="success-stories">
+            <h2 class="section-title">🏆 Historias de Éxito</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                Ejemplos reales de cómo se han superado barreras en diferentes contextos
+            </p>
+            <div class="stories-grid">
+                <div class="story-card">
+                    <div class="story-icon">🎓</div>
+                    <h4>Colegio San José - Arequipa</h4>
+                    <p>Institución conservadora que implementó ESI tras diálogo con padres. Resultado: 0 embarazos adolescentes en 3 años.</p>
+                    <p style="margin-top: 15px; font-style: italic;">Clave: Involucramiento gradual de familias y evidencia científica.</p>
+                </div>
+                <div class="story-card">
+                    <div class="story-icon">🏥</div>
+                    <h4>Centro de Salud Móvil - Loreto</h4>
+                    <p>Programa itinerante que llega a comunidades amazónicas remotas. Atendió 2,000 adolescentes en su primer año.</p>
+                    <p style="margin-top: 15px; font-style: italic;">Clave: Trabajo con líderes locales y promotores bilingües.</p>
+                </div>
+                <div class="story-card">
+                    <div class="story-icon">📱</div>
+                    <h4>App "Kuska" - Nacional</h4>
+                    <p>Aplicación en quechua y español que brinda información sobre salud sexual. Más de 50,000 descargas.</p>
+                    <p style="margin-top: 15px; font-style: italic;">Clave: Tecnología culturalmente apropiada y accesible.</p>
+                </div>
+                <div class="story-card">
+                    <div class="story-icon">👨‍👩‍👧‍👦</div>
+                    <h4>Programa Familias Abiertas - Cusco</h4>
+                    <p>Talleres familiares que mejoran comunicación sobre sexualidad. 85% de familias reporta mejor diálogo.</p>
+                    <p style="margin-top: 15px; font-style: italic;">Clave: Espacios seguros y facilitadores capacitados.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 30px;">
+                <div>
+                    <h3 style="color: #fdcb6e; margin-bottom: 15px;">Superando Barreras</h3>
+                    <p>💬 Diálogo respetuoso</p>
+                    <p>📚 Evidencia científica</p>
+                    <p>🤝 Trabajo colaborativo</p>
+                </div>
+                <div>
+                    <h3 style="color: #fdcb6e; margin-bottom: 15px;">Estrategias Clave</h3>
+                    <p>🎓 Capacitación continua</p>
+                    <p>🌍 Sensibilidad cultural</p>
+                    <p>💪 Empoderamiento juvenil</p>
+                </div>
+                <div>
+                    <h3 style="color: #fdcb6e; margin-bottom: 15px;">Recuerda</h3>
+                    <p>✅ Cada barrera es superable</p>
+                    <p>✅ El cambio es posible</p>
+                    <p>✅ Los jóvenes son el futuro</p>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #555; padding-top: 20px;">
+                <p>&copy; 2025 StayNonPregnant - Rompiendo barreras, construyendo futuros</p>
+                <p>🌸 Juntos podemos superar cualquier obstáculo</p>
+            </div>
+        </div>
+    </footer>
+
+
+</body>
+</html>
